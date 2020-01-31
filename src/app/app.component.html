@@ -1,17 +1,33 @@
 <div class="container">
   <div class="row">
     <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
-      <input type="text" [(ngModel)]="filteredStatus">
+      <input type="text" [(ngModel)]="filteredStatus" style="margin-bottom: 1rem;">
+      <br>
+      <button class="btn btn-primary" (click)="onAddServer()">Add Server</button>
+      <br><br>
+      <h2>App Status: {{ appStatus | async }}</h2>
       <hr>
+      <h4>Sort by:</h4>
+      <span style="display: flex;">
+        <button class=" btn btn-default" [ngClass]="{sortActive: sortBy === 'name'}"
+          (click)="changeSortBy('name')">Name</button>
+        <button class="btn btn-default" (click)="changeSortBy('instanceType')"
+          [ngClass]="{sortActive: sortBy === 'instanceType'}">Type</button>
+        <button class="btn btn-default" (click)="changeSortBy('status')"
+          [ngClass]="{sortActive: sortBy === 'status'}">Status</button>
+      </span>
+      <button class="btn btn-default" [innerText]="ascending ? 'Descending' : 'Ascending'"
+        (click)="changeAscending()"></button>
       <ul class="list-group">
-        <li class="list-group-item" *ngFor="let server of servers | filter:filteredStatus:'status'"
+        <li class="list-group-item"
+          *ngFor="let server of servers | filter:filteredStatus:'status' | sort:ascending:sortBy"
           [ngClass]="getStatusClasses(server)">
           <span class="badge">
             {{ server.status }}
           </span>
           <strong>{{ server.name | shorten:'15' }}</strong> |
           {{ server.instanceType | uppercase }} |
-          {{ server.started | date:'fullDate' | uppercase }}
+          {{ server.started | date:'fullDate' | uppercase | reverse }}
         </li>
       </ul>
     </div>

@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'filter'
+  //, pure: false
 })
 export class FilterPipe implements PipeTransform {
 
@@ -12,9 +13,6 @@ export class FilterPipe implements PipeTransform {
     const resultArray = [];
     for (const item of value) {
       const propertyString = item[propName];
-      if (propertyString === filterString) {
-        resultArray.push(item);
-      }
       let startingIndex = 0;
       //this is not working!
       do {
@@ -24,7 +22,7 @@ export class FilterPipe implements PipeTransform {
         }
         startingIndex++;
       }
-      while (startingIndex < propertyString.length - filterString.length);
+      while (startingIndex <= propertyString.length - filterString.length);
     }
     return resultArray;
   }
